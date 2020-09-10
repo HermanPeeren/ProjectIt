@@ -1,0 +1,8 @@
+package trainWagon
+context Train::unlink(w:Wagon)
+        pre: self.wagon->includes(w)
+        pre: self.wagon->size()>1
+        post: self.wagon->size()>0
+        post: self.wagon = self.wagon@pre->excluding(w)
+        post: self.wagon->size() = self.wagon@pre->size()-1
+endpackage

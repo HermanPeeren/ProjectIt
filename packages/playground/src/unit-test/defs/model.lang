@@ -1,0 +1,103 @@
+language ABC
+
+model Root {
+    name: string;
+    unit1s: Unit1;
+    unit2s: Unit2;
+}
+
+modelunit Unit1 {
+    name: string;
+    part1: concept1A;
+    reference ref1: concept1B;
+}
+
+concept concept1A {
+    part1: concept1C;
+    reference ref1: concept1D;
+}
+
+concept concept1B {
+    name: string;
+    part1: concept1E;
+    reference ref1: concept1F;
+}
+
+concept concept1C {
+    part1: concept1E;
+    reference ref1: concept1F;
+}
+
+concept concept1D {
+    name: string;
+//    part1: concept1E;
+//    reference ref1: concept1F;
+}
+
+concept concept1E {
+//    reference ref1: concept1F;
+//    part1: concept1E;
+}
+
+concept concept1F {
+    name: string;
+//    part1: concept1E;
+//    reference ref1: concept1F;
+}
+
+concept concept1G base concept1A {
+    name: string;
+    part1G: concept1H;
+    reference ref1G: concept1I;
+}
+
+concept concept1H {
+    name: string;
+//    part1: concept1E;
+//    reference ref1: concept1F;
+}
+
+concept concept1I {
+    name: string;
+//    part1: concept1E;
+//    reference ref1: concept1F;
+}
+
+modelunit Unit2 {
+    name: string;
+    part2: concept2A;
+    reference ref2: concept2B;
+}
+
+concept concept2A {
+    part2: concept2C;
+    reference ref2: concept2D;
+}
+
+concept concept2B {
+    name: string;
+    part2: concept2E;
+    reference ref2: concept2F;
+}
+
+concept concept2C {
+    part2: concept2E;
+    reference ref2: concept2F;
+}
+
+concept concept2D {
+    name: string;
+//    part2: concept2E;
+//    reference ref2: concept2F;
+}
+
+concept concept2E {
+//    reference ref2: concept2F;
+//    part2: concept2E;
+}
+
+concept concept2F {
+    name: string;
+//    part2: concept2E;
+//    reference ref2: concept2F;
+}

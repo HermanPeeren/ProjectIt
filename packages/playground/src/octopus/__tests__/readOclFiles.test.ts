@@ -1,19 +1,18 @@
 import { OctopusEnvironment } from "../environment/gen/OctopusEnvironment";
 import { findFiles } from "./test-utils";
-import * as fs from "fs";
 
 const writer = OctopusEnvironment.getInstance().writer;
 const reader = OctopusEnvironment.getInstance().reader;
 
 function doAllFilesIn(folderPath: string) {
-    const umlFiles = findFiles(folderPath, ".uml2");
+    const umlFiles = findFiles(folderPath, ".ocl");
     for (const file of umlFiles) {
-        const unit1 = reader.readFromFile(file, "UmlPart");
-        console.log(writer.writeToString(unit1, 0, false));
+        const unit1 = reader.readFromFile(file, "OclPart");
+        console.log("RESULT FOR: " + file + ":\n" + writer.writeToString(unit1, 0, false));
     }
 }
 
-describe("Testing Parser on UML files", () => {
+describe("Testing Parser on OCL files", () => {
     // TODO use snapshots
     test("book project unparsed and parsed again", () => {
         doAllFilesIn("src/octopus/__tests__/Book-project/");
@@ -27,9 +26,4 @@ describe("Testing Parser on UML files", () => {
         doAllFilesIn("src/octopus/__tests__/Train-project/");
     });
 
-    test("book model STRING unparsed and parsed again", () => {
-        const langSpec: string = fs.readFileSync("src/octopus/__tests__/DvdShop-project/orders.uml2", { encoding: "UTF8" });
-        const unit1 = reader.readFromString(langSpec, "UmlPart");
-        console.log(writer.writeToString(unit1, 0, false));
-    });
 });

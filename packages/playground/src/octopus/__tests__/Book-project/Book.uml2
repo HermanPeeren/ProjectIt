@@ -1,3 +1,4 @@
+/* some comments */
 <package> Book
  + <class> Prependix <specializes> Bookpart
     <attributes>

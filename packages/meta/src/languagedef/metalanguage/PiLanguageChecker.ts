@@ -10,7 +10,8 @@ import { PiLogger } from "../../../../core/src/util/PiLogging";
 import { reservedWordsInTypescript } from "../../validatordef/generator/templates/ReservedWords";
 
 const LOGGER = new PiLogger("PiLanguageChecker").mute();
-const piReservedWords = ["model", "modelunit", "abstract", "limited", "language", "property", "concept", "binary", "expression", "concept", "base", "reference", "priority", "implements"];
+const piReservedWords = ["model", "modelunit", "abstract", "limited", "language", "property", "package", "concept", "binary", "expression", "concept", "base", "reference", "priority", "implements", "in"];
+// "in" is reserved word in pegjs
 
 // TODO add check: priority error from parser into checker => only for expression concepts
 

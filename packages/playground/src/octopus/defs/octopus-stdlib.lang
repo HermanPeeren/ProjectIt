@@ -1,0 +1,36 @@
+language octopus
+
+limited OclIterator {
+    name: string;
+    textualRepresentation: string;
+//    reference returnType?: IClassifier;
+    OCL_Select        	= { textualRepresentation: "select"}
+    OCL_ForAll        	= { textualRepresentation: "forAll"}
+    OCL_Exists        	= { textualRepresentation: "exists"}
+    OCL_Reject        	= { textualRepresentation: "reject"}
+    OCL_Collect       	= { textualRepresentation: "collect"}
+    OCL_IsUnique      	= { textualRepresentation: "isUnique"}
+    OCL_SortedBy      	= { textualRepresentation: "sortedBy"}
+    OCL_AnyIterator   	= { textualRepresentation: "any"}
+    OCL_One          	= { textualRepresentation: "one"}
+    OCL_CollectNested	= { textualRepresentation: "collectNested"}
+    OCL_Iterate       	= { textualRepresentation: "iterate"}
+}
+
+//limited StdLibCollectionType base CollectionType {
+//    name: string;
+////    Set
+////    OrderedSet
+////    Bag
+////    Sequence
+////    Collection
+//
+//}
+
+limited CollectionMetaType {
+    COLLECTION 		= { name: "Collection" }
+    SET 			= { name: "Set" }
+    ORDEREDSET 		= { name: "OrderedSet" }
+    BAG 			= { name: "Bag" }
+    SEQUENCE 		= { name: "Sequence" }
+}

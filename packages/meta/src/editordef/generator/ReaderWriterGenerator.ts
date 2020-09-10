@@ -47,22 +47,20 @@ export class ReaderWriterGenerator {
         const parserFile = Helpers.pretty(parserTemplate.generateParser(this.language, editDef, relativePath), "Reader Class", generationStatus);
         fs.writeFileSync(`${this.readerGenFolder}/${Names.reader(this.language)}.ts`, parserFile);
 
-        this.language.units.forEach(unit => {
-            LOGGER.log(`Generating unit parser (pegjs input): ${this.readerGenFolder}/${Names.pegjs(unit)}.pegjs`);
-            const pegjsFile = pegjsTemplate.generatePegjsForUnit(this.language, unit, editDef);
-            fs.writeFileSync(`${this.readerGenFolder}/${Names.pegjs(unit)}.pegjs`, pegjsFile);
+        const pegjsName = Names.pegjs(this.language);
+        LOGGER.log(`Generating parser (pegjs input): ${this.readerGenFolder}/${pegjsName}.pegjs`);
+        const pegjsFile = pegjsTemplate.generatePegjs(this.language, editDef);
+        fs.writeFileSync(`${this.readerGenFolder}/${pegjsName}.pegjs`, pegjsFile);
 
-            try {
-                LOGGER.log(`Generating unit parser (pegjs output): ${this.readerGenFolder}/${Names.pegjs(unit)}.js`);
-                const pegjsParser = peg.generate(pegjsFile, { output: "source", format: "commonjs" });
-                fs.writeFileSync(`${this.readerGenFolder}/${Names.pegjs(unit)}.js`, pegjsParser);
-            } catch (e) {
-                generationStatus.numberOfErrors += 1;
-
-                // we remove the last dot of the error message, because the message is contained in another sentence
-                LOGGER.error(this, `Error in call to pegjs: '${e.message.replace(/\.$/, '')}' [line: ${e.location?.start.line}, column: ${e.location?.start.column}] in file '${Names.pegjs(unit)}'.`);
-            }
-        });
+        try {
+            LOGGER.log(`Generating parser (pegjs output): ${this.readerGenFolder}/${pegjsName}.js`);
+            const pegjsParser = peg.generate(pegjsFile, { output: "source", format: "commonjs" });
+            fs.writeFileSync(`${this.readerGenFolder}/${pegjsName}.js`, pegjsParser);
+        } catch (e) {
+            generationStatus.numberOfErrors += 1;
+            // we remove the last dot of the error message, because the message is contained in another sentence
+            LOGGER.error(this, `Error in call to pegjs: '${e.message.replace(/\.$/, '')}' [line: ${e.location?.start.line}, column: ${e.location?.start.column}] in file '${pegjsName}'.`);
+        }
 
         if (generationStatus.numberOfErrors > 0) {
             LOGGER.info(this, `Generated reader and writer for ${this.language.name} with ${generationStatus.numberOfErrors} errors.`);
