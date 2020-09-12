@@ -2,7 +2,7 @@ language octopus
 
 limited OclIterator {
     name: string;
-    textualRepresentation: string;
+    textualRepresentation: string; // probably not needed, parameterName: can be handled in .edit file
 //    reference returnType?: IClassifier;
     OCL_Select        	= { textualRepresentation: "select"}
     OCL_ForAll        	= { textualRepresentation: "forAll"}
@@ -17,20 +17,107 @@ limited OclIterator {
     OCL_Iterate       	= { textualRepresentation: "iterate"}
 }
 
-//limited StdLibCollectionType base CollectionType {
-//    name: string;
-////    Set
-////    OrderedSet
-////    Bag
-////    Sequence
-////    Collection
-//
+concept StdLibCollectionType implements ICollectionType {
+    name: string;
+//    Set
+//    OrderedSet
+//    Bag
+//    Sequence
+//    Collection
+}
+
+
+
+abstract concept StdLibClassifier implements IClassifier {
+}
+
+concept StdLibDataType implements IDataType {
+//    OCL_Any;           		// "OclAny";
+//	OCL_Void;          		// "OclVoid";
+//    OCL_Type;          		// "OclType";
+//	OCL_State;         		// "OclState";
+//    OCL_Message;       		// "OclMessage";
+//    OCL_ModelElement;  		// "OclModelElement";
+//    DependsOnArgumentType; 	// "DependsOnArgumentType";
+//    DependsOnSourceType;   	// "DependsOnSourceType";
+}
+
+//concept StdLibOclMessageType base OclMessageType {
+//    reference referredOperation: Operation;
 //}
 
-limited CollectionMetaType {
-    COLLECTION 		= { name: "Collection" }
-    SET 			= { name: "Set" }
-    ORDEREDSET 		= { name: "OrderedSet" }
-    BAG 			= { name: "Bag" }
-    SEQUENCE 		= { name: "Sequence" }
+concept StdLibPrimitiveType implements IPrimitiveType {
+//    operations: StdLibOperation[];
+//    OCL_Boolean;    // "Boolean";
+//    OCL_Integer;    // "Integer";
+//    OCL_Real;       // "Real";
+//    OCL_String;     // "String";
+//    OCL_String =     // "String";
+//    { operations: [
+//            {
+//                name: "=",
+//                parameters: [
+//                    {name: "object2", type: OCL_String}
+//                ],
+//                returnType: OCL_Boolean,
+//                isInfix: true
+//            },
+//            {
+//                name: "substring",
+//                parameters:[
+//                    {name: "from", type: OCL_Integer}
+//                    {name: "to"  , type: OCL_Integer}
+//                ],
+//                returnType: OCL_String,
+//                isInfix: false
+//            }
+//
+////            StdlibOperation.create({ name: "<>", parameterName: "object2", parameterType: OCL_String, returnType: OCL_Boolean, parameterName: true) );
+////            StdlibOperation.create({ name: "size", parameterName: OCL_Integer) );
+////    		StdlibOperation.create({ name: "concat", parameterName: "s", parameterType: OCL_String, returnType: OCL_String) );
+////    		StdlibOperation.create({ name: "+", parameterName: "s", parameterType: OCL_String, returnType: OCL_String, parameterName: true) );
+////            StdlibOperation.create({ name: "toInteger", parameterName: OCL_Integer) );
+////            StdlibOperation.create({ name: "toReal", parameterName: OCL_Real) );
+////            StdlibOperation.create({ name: "toUpper", parameterName: OCL_String) );
+////            StdlibOperation.create({ name: "toLower", parameterName: OCL_String) );
+////            StdlibOperation.create({ name: "substring", parameterName: "from", parameterName: OCL_Integer, parameterName: "to"  , parameterName: OCL_Integer, returnType: OCL_String) );
+//        ]
+//    }
+}
+
+concept StdLibTupleType implements ITupleType {
+}
+
+concept StdLibOperation implements IOperation {
+// inherits from Operation:
+//    parameters: Parameter[];
+//    reference returnType?: IClassifier;
+//    reference owner: IClassifier;
+//    hasClassScope: boolean;
+//    isOClDef: boolean;
+//    isAbstract: boolean;
+//    isInfix: boolean;
+//    isPrefix: boolean;
+}
+
+concept StdLibPackage implements IUmlPackage {
+// inherits from UmlPackage:
+//    subpackages: UmlPackage[];
+//    reference parent: UmlPackage;
+//    reference root: UmlPackage;
+//    classifiers: IClassifier[];
+//    interfaces: UmlInterface[];
+//    associations: Association[];
+//    imports: ImportedElement[];
+
+}
+
+concept StdLibParameter implements IParameter {
+// inherits from IModelElement:
+//    name: string;
+//    pathName: PathName;
+// inherits from Parameter:
+//    reference type: IClassifier;
+//    reference owner: Operation;
+//    directionKind: ParameterDirectionKind;
 }

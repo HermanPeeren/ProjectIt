@@ -3,7 +3,7 @@ language octopus
 
 modelunit UmlPart {
     name: string;
-    packages: UmlPackage[];
+    packages: IUmlPackage[];
     associations: Association[];
 }
 
@@ -26,26 +26,7 @@ concept Attribute base StructuralFeature {
     isOClDef: boolean;
 }
 
-interface IClass base IClassifier {
-}
-
 concept UmlClass implements IClass {
-}
-
-interface IClassifier base IPackagableElement {
-    attributes: Attribute[];
-    operations: Operation[];
-    navigations: AssociationEnd[];
-    reference generalizations: IClassifier[];
-    reference subClasses: IClassifier[];
-    reference interfaces: UmlInterface[];
-    states: State[];
-    classAttributes: Attribute[];
-    classOperations: Operation[];
-    isCollectionKind: boolean;
-    reference owner: UmlPackage;
-    isAbstract: boolean;
-    stereotype: string;
 }
 
 concept CollectionType base DataType {
@@ -75,49 +56,24 @@ concept ImportedElement implements IModelElement {
 }
 concept UmlInterface implements IClassifier {
 }
-interface IModelElement {
-    name: string;
-    pathName: PathName;
-}
+
 concept MultiplicityKind {
     isSingleObject: boolean;
     lowerBound: number;
     upperBound: number;
 }
-concept Operation implements IPackagableElement {
-    parameters: Parameter[];
-    reference returnType?: IClassifier;
-    reference owner: IClassifier;
-    hasClassScope: boolean;
-    isOClDef: boolean;
-    isAbstract: boolean;
-    isInfix: boolean;
-    isPrefix: boolean;
+concept Operation implements IOperation {
 }
-concept UmlPackage implements IModelElement {
-    subpackages: UmlPackage[];
-    reference parent: UmlPackage;
-    reference root: UmlPackage;
-    classifiers: IClassifier[];
-    interfaces: UmlInterface[];
-    associations: Association[];
-    imports: ImportedElement[];
+concept UmlPackage implements IUmlPackage {
 }
-
-interface IPackagableElement base IModelElement {
-    visibility: VisibilityKind;
-}
-concept Parameter implements IModelElement {
-    reference type: IClassifier;
-    reference owner: Operation;
-    directionKind: ParameterDirectionKind;
+concept Parameter implements IParameter {
 }
 concept PathName {
     names: string[];
     // first = names[0];
     // last  = names[names.length-1]
 }
-concept PrimitiveType base DataType {
+concept PrimitiveType implements IPrimitiveType {
 }
 concept State implements IPackagableElement {
     reference owner: Operation;
@@ -135,17 +91,22 @@ concept StructuralFeature implements IPackagableElement {
     isAggregate: boolean;
     hasClassScope: boolean;
 }
-concept TupleType base DataType {
-    parts: VariableDeclaration[];
+concept TupleType implements ITupleType {
 }
 limited ParameterDirectionKind {
     IN    = { name: "IN" }
     OUT   = { name: "OUT" }
     INOUT = { name: "INOUT" }
 }
-
 limited VisibilityKind {
 	PUBLIC = { name: "PUBLIC" }
 	PRIVATE = { name: "PRIVATE" }
 	PROTECTED = { name: "PROTECTED" }
+}
+limited CollectionMetaType {
+    COLLECTION 		= { name: "Collection" }
+    SET 			= { name: "Set" }
+    ORDEREDSET 		= { name: "OrderedSet" }
+    BAG 			= { name: "Bag" }
+    SEQUENCE 		= { name: "Sequence" }
 }
