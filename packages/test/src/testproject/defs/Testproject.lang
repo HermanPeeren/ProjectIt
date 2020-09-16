@@ -8,12 +8,18 @@ model TestStart {
 concept AA  {
     name: string;
     // the possibilities for primitive properties
-    AAprop1: string;
-    AAprop2: string[];
-    AAprop3: number;
-    AAprop4: number[];
-    AAprop5: boolean;
-    AAprop6: boolean[];
+//        AAprop1a: string = 102;
+//        AAprop2a: string[] = [12, 24, 36, 48];
+//        AAprop3a: number = "102";
+//        AAprop4a: number[] = "AAP";
+//        AAprop5a: boolean = [true, false, true, false, true];
+//        AAprop6a: boolean[] = false;
+    AAprop1: string = "EEN TEKST";
+    AAprop2: string[] = ["AAP", "NOOT", "MIES"];
+    AAprop3: number = 102;
+    AAprop4: number[] = [12, 24, 36, 48];
+    AAprop5: boolean = false;
+    AAprop6: boolean[] = [true, false, true, false, true];
     // properties with concept as type
     reference AAprop7: BB;
     reference AAprop8: BB[];

@@ -446,7 +446,36 @@ export class PiLanguageChecker extends Checker<PiLanguage> {
             {
                 check: !!element.primType,
                 error: `Property '${element.name}' should have a type ${this.location(element)}.`,
-                whenOk: () => this.checkPrimitiveType(element.primType, element)
+                whenOk: () => {
+                    this.checkPrimitiveType(element.primType, element);
+                    // TODO check initial value(s) does not fucntion correctly
+                    // tested in test/testproject/concept AA
+                    if (!!element.initialValue || !!element.initialValueList) { // the property has an initial value, so check it
+                        if (!element.isList) {
+                            this.nestedCheck({
+                                check: !!!element.initialValueList && !!element.initialValue,
+                                error: `Initial value '[${element.initialValueList}]' should be a single value ${this.location(element)}.`,
+                                whenOk: () => {
+                                    // console.log("checking " + element.initialValue + " against " + element.primType);
+                                    this.simpleCheck(this.checkValueToType(element.initialValue, element.primType),
+                                        `Type of '${element.initialValue}' does not equal type of property '${element.name}' ${this.location(element)}.`);
+                                }
+                            });
+                        } else {
+                            this.nestedCheck({
+                                check: !!element.initialValueList && !!!element.initialValue,
+                                error: `Initial value '${element.initialValue}' should be a list value ${this.location(element)}.`,
+                                whenOk: () => {
+                                    element.initialValueList.forEach(value => {
+                                        this.simpleCheck(this.checkValueToType(value, element.primType),
+                                            `Type of '${value}' does not equal type of property '${element.name}' ${this.location(element)}.`);
+                                    });
+                                }
+                            });
+                        }
+                    }
+                    // end TO DO
+                }
             });
     }
 

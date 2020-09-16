@@ -119,8 +119,8 @@ property = part:partProperty      { return part; }
          / ref:referenceProperty  { return ref; }
 
 // TODO add initialvalue
-// partProperty = isPublic:publicKey? name:var ws isOptional:optionalKey? name_separator ws type:var isList:"[]"? ws initialvalue:initialvalue? semicolon_separator
-partProperty = isPublic:publicKey? name:var ws isOptional:optionalKey? name_separator ws type:var isList:"[]"? semicolon_separator
+ partProperty = isPublic:publicKey? name:var ws isOptional:optionalKey? name_separator ws type:var isList:"[]"? ws initialvalue:initialvalue? semicolon_separator
+//partProperty = isPublic:publicKey? name:var ws isOptional:optionalKey? name_separator ws type:var isList:"[]"? semicolon_separator
     {
         if (type === "string" || type === "boolean" || type === "number") {
             return create.createPrimitiveProperty({
@@ -129,6 +129,7 @@ partProperty = isPublic:publicKey? name:var ws isOptional:optionalKey? name_sepa
                 "primType": type,
                 "isOptional": (isOptional?true:false),
                 "isList": (isList?true:false),
+                "initialValue": initialvalue,
                 "location": location()
             });
         } else {
@@ -145,8 +146,8 @@ partProperty = isPublic:publicKey? name:var ws isOptional:optionalKey? name_sepa
     }
 
 // TODO add initialvalue
-// referenceProperty = referenceKey ws name:var ws isOptional:optionalKey? name_separator ws type:classifierReference isList:"[]"? ws initialvalue:initialvalue? semicolon_separator
-referenceProperty = isPublic:publicKey? referenceKey ws name:var ws isOptional:optionalKey? name_separator ws type:classifierReference isList:"[]"? semicolon_separator
+ referenceProperty = isPublic:publicKey? referenceKey ws name:var ws isOptional:optionalKey? name_separator ws type:classifierReference isList:"[]"? ws initialvalue:initialvalue? semicolon_separator
+//referenceProperty = isPublic:publicKey? referenceKey ws name:var ws isOptional:optionalKey? name_separator ws type:classifierReference isList:"[]"? semicolon_separator
     { return create.createReferenceProperty({
         "isPublic": (!!isPublic),
         "name": name,

@@ -31,25 +31,30 @@ export function makeBasicProperties(metaType: string, conceptName: string, hasSu
 
 export function makePrimitiveProperty(property: PiPrimitiveProperty): string {
     const comment = "// implementation of " + property.name;
-    // const decorator = property.isList ? "@observablelistpart" : "@observable";
     const decorator = "@observable";
     const arrayType = property.isList ? "[]" : "";
     let initializer = "";
-    if (property.isList) {
-        initializer = "";
-    } else {
+    if (!property.isList) {
         switch (property.primType) {
             case "string": {
-                initializer = "= \"\"";
+                initializer = `= \"${property.initialValue ? property.initialValue : ``}\"`;
                 break;
             }
             case "number": {
-                initializer = "= 0";
+                initializer = `= ${property.initialValue ? property.initialValue : `0`}`;
                 break;
             }
             case "boolean": {
-                initializer = "= false";
+                initializer = `= ${property.initialValue ? property.initialValue : `false`}`;
                 break;
+            }
+        }
+    } else {
+        if (!!property.initialValueList) {
+            if (property.primType === "string") {
+                initializer = `= [${property.initialValueList.map(elem => `\"${elem}\"`).join(", ")}]`;
+            } else {
+                initializer = `= [${property.initialValueList}]`;
             }
         }
     }

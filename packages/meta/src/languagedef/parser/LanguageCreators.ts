@@ -174,6 +174,8 @@ function createCommonPropertyAttrs(data: Partial<PiProperty>, result: PiProperty
         result.location = data.location;
         result.location.filename = currentFileName;
     }
+    // TODO data.initialValue is ignored for Part and Reference Properties
+    // they should at least result in an error message
 }
 
 export function createPrimitiveProperty(data: Partial<PiPrimitiveProperty>): PiPrimitiveProperty {
@@ -182,6 +184,13 @@ export function createPrimitiveProperty(data: Partial<PiPrimitiveProperty>): PiP
     result.isPart = true;
     if (!!data.primType) {
         result.primType = data.primType;
+    }
+    if (!!data.initialValue) {
+        if (Array.isArray(data.initialValue)) {
+            result.initialValueList = data.initialValue;
+        } else {
+            result.initialValue = data.initialValue;
+        }
     }
     createCommonPropertyAttrs(data, result);
     return result;
