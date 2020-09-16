@@ -264,7 +264,7 @@ expression PrimitiveLiteralExp base LiteralExp {
  * A property can be an operation, attribute, association end, predefined
  * iterator, etc.
  */
-expression PropertyCallExp base OclExpression {
+expression PropertyCallExp { // base OclExpression {
     reference source: OclExpression;
     isMarkedpre: boolean;
 }

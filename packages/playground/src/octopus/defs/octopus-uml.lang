@@ -3,7 +3,7 @@ language octopus
 
 modelunit UmlPart {
     name: string;
-    packages: IUmlPackage[];
+    packages: UmlPackage[];
     associations: Association[];
 }
 
@@ -64,7 +64,14 @@ concept MultiplicityKind {
 }
 concept Operation implements IOperation {
 }
-concept UmlPackage implements IUmlPackage {
+concept UmlPackage implements IModelElement {
+    subpackages: UmlPackage[];
+    reference parent: UmlPackage;
+    reference root: UmlPackage;
+    classifiers: IClassifier[];
+    interfaces: UmlInterface[];
+    associations: Association[];
+    imports: ImportedElement[];
 }
 concept Parameter implements IParameter {
 }

@@ -21,7 +21,7 @@ interface IClassifier base IPackagableElement {
     classAttributes: Attribute[];
     classOperations: IOperation[];
     isCollectionKind: boolean;
-    reference owner: IUmlPackage;
+    reference owner: UmlPackage;
     isAbstract: boolean;
     stereotype: string;
 }
@@ -53,29 +53,8 @@ interface IOperation base IPackagableElement {
     isPrefix: boolean;
 }
 
-interface IUmlPackage base IModelElement {
-    subpackages: IUmlPackage[];
-    reference parent: IUmlPackage;
-    reference root: IUmlPackage;
-    classifiers: IClassifier[];
-    interfaces: UmlInterface[];
-    associations: Association[];
-    imports: ImportedElement[];
-}
-
 interface IParameter base IModelElement {
     reference type: IClassifier;
     reference owner: IOperation;
     directionKind: ParameterDirectionKind;
-}
-
-/**
- * VariableDeclaration : an expression that defines a variable and binds
- * it to a type. Optionally it can hold an initial value for the variable.
- */
-concept VariableDeclaration implements IModelElement {
-// name: string; inherted from IModelElement
-    type: IClassifier;
-//    initExpression: OclExpression;
-    isIteratorVar: boolean;
 }
