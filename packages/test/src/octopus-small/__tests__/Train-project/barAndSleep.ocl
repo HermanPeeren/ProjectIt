@@ -1,0 +1,6 @@
+--package trainWagon
+
+--context Train
+--    inv barAndSleep: Train.allInstances()->collect(t|t.barWagon())->asSet()->flatten() = SleepingCar.allInstances()                                                
+--endpackage
+

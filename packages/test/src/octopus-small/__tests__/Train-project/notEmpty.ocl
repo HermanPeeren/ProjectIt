@@ -1,0 +1,4 @@
+package trainWagon
+context Wagon
+    inv notEmpty: self.id<>''
+endpackage

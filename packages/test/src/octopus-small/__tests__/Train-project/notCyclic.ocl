@@ -1,0 +1,4 @@
+package trainWagon
+context Train        
+    inv notCyclic: self.wagon->forAll(w1,w2| w1<>w2 implies not ((w1.succ) -> includes (w2) and (w2.succ) -> includes (w1)))
+endpackage

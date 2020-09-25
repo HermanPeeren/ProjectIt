@@ -1,0 +1,4 @@
+package trainWagon
+context Train        
+    inv wagonsOfTrain: self.wagon->includesAll(self.barWagon())
+endpackage

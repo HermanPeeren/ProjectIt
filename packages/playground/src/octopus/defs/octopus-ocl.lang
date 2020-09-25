@@ -6,6 +6,11 @@ modelunit OclPart {
     contexts: OclContext[];
 }
 
+/*
+The following concept definitions are not used because
+they cause problems in the parser.
+TODO: fix this
+
 abstract concept OclContext {
 }
 
@@ -24,6 +29,19 @@ concept ClassContext base OclContext {
 
 concept OperationContext base OclContext {
     reference operation: Operation;
+    bodyExpression?: OclExpression;
+    preConditions: OclExpression[];
+    postConditions: OclExpression[];
+}
+*/
+
+
+concept OclContext {
+    reference referredElement: IPackagableElement;
+    initExpression?: OclExpression;
+    deriveExpression?: OclExpression;
+    invariants: OclExpression[];
+    definitions: OclExpression[];
     bodyExpression?: OclExpression;
     preConditions: OclExpression[];
     postConditions: OclExpression[];
@@ -61,35 +79,35 @@ expression AttributeCallExp base ModelPropertyCallExp {
 expression BooleanLiteralExp base PrimitiveLiteralExp {
     symbol: boolean;
 }
-/**
- * CollectionItem : an element in a literal collection expression, like
- * '4' in 'Set{4,10,5}', or 'a.b' in 'Bag{ a.b }'.
- */
-expression CollectionItem base CollectionLiteralPart {
-    item: OclExpression;
-}
-/**
- * CollectionLiteralExp : a representation of a literal collection expression,
- * like 'Set{2,4,7}'
- */
-expression CollectionLiteralExp base LiteralExp {
-    reference collectionType: CollectionType; // added by Anneke
-    parts: CollectionLiteralPart[];
-}
-/**
- * CollectionLiteralPart : an element in a literal collection expression, like
- * '4' in 'Set{4,10,5}', or '10..24' in 'Bag{ 10..24 }'.
- */
-expression CollectionLiteralPart {
-}
-/**
- * CollectionRange : a range that represents a number of elements in a literal
- * collection expression, like '2..5' in 'Bag{ 2..5 }'.
- */
-expression CollectionRange base CollectionLiteralPart {
-    first: OclExpression;
-    last: OclExpression;
-}
+///**
+// * CollectionItem : an element in a literal collection expression, like
+// * '4' in 'Set{4,10,5}', or 'a.b' in 'Bag{ a.b }'.
+// */
+//expression CollectionItem base CollectionLiteralPart {
+//    item: OclExpression;
+//}
+///**
+// * CollectionLiteralExp : a representation of a literal collection expression,
+// * like 'Set{2,4,7}'
+// */
+//expression CollectionLiteralExp base LiteralExp {
+//    reference collectionType: CollectionType; // added by Anneke
+//    parts: CollectionLiteralPart[];
+//}
+///**
+// * CollectionLiteralPart : an element in a literal collection expression, like
+// * '4' in 'Set{4,10,5}', or '10..24' in 'Bag{ 10..24 }'.
+// */
+//expression CollectionLiteralPart {
+//}
+///**
+// * CollectionRange : a range that represents a number of elements in a literal
+// * collection expression, like '2..5' in 'Bag{ 2..5 }'.
+// */
+//expression CollectionRange base CollectionLiteralPart {
+//    first: OclExpression;
+//    last: OclExpression;
+//}
 /**
  * EnumLiteralExp : a representation of a value of an enumeration type, like
  * 'gold'.
@@ -112,19 +130,19 @@ expression IfExp {
 expression IntegerLiteralExp base NumericLiteralExp {
     symbol: number;
 }
-/**
- * IterateExp : a representation of the generic loop operation called 'iterate'.
- */
-expression IterateExp base LoopExp {
-    result: VariableDeclaration;
-}
-/**
- * IteratorExp : a representation of one of the loop expressions in the standard
- * library, e.g. 'forAll', 'exists'.
- */
-expression IteratorExp base LoopExp {
-    reference referredIterator: OclIterator; // type from stdlib
-}
+///**
+// * IterateExp : a representation of the generic loop operation called 'iterate'.
+// */
+//expression IterateExp base LoopExp {
+//    result: VariableDeclaration;
+//}
+///**
+// * IteratorExp : a representation of one of the loop expressions in the standard
+// * library, e.g. 'forAll', 'exists'.
+// */
+//expression IteratorExp base LoopExp {
+//    reference referredIterator: OclIterator; // type from stdlib
+//}
 /**
  * LetExp : a representation of an expression that holds a local variable
  */
@@ -138,15 +156,15 @@ expression LetExp base OclExpression {
  */
 abstract expression LiteralExp base OclExpression {
 }
-/**
- * LoopExp : a representation of an expression that loops over a collection.
- * All elements of the collection are visited and the body is executed for
- * each of them in turn.
- */
-abstract expression LoopExp base PropertyCallExp {
-    body: OclExpression;
-    iterators: VariableDeclaration[];
-}
+///**
+// * LoopExp : a representation of an expression that loops over a collection.
+// * All elements of the collection are visited and the body is executed for
+// * each of them in turn.
+// */
+//abstract expression LoopExp base PropertyCallExp {
+//    body: OclExpression;
+//    iterators: VariableDeclaration[];
+//}
 /**
  * ModelPropertyCallExp : an expression that refers to a property of a Classifier.
  */
@@ -264,7 +282,7 @@ expression PrimitiveLiteralExp base LiteralExp {
  * A property can be an operation, attribute, association end, predefined
  * iterator, etc.
  */
-expression PropertyCallExp base OclExpression {
+expression PropertyCallExp { // base OclExpression {
     reference source: OclExpression;
     isMarkedpre: boolean;
 }
