@@ -10,15 +10,33 @@ OclPart {
 OclContext {
     @projection normal
     [context ${self.referredElement}
-    [?inv: ${self.invariants @horizontal @separator[\ninv:]}]
-    [?def: ${self.definitions @horizontal @separator[\ndef:]}]
-    [?body: ${self.bodyExpression}]
-    [?pre: ${self.preConditions @horizontal @separator[\npre:]}]
-    [?post: ${self.postConditions @horizontal @separator[\npost:]}]
+    [?inv: ${self.invariants @horizontal @separator[\ninv]}]
+    [?def: ${self.definitions @horizontal @separator[\ndef]}]
     [?init: ${self.initExpression}]
     [?derive: ${self.deriveExpression}]
+    [?body: ${self.bodyExpression}]
+    [?pre: ${self.preConditions}]
+    [?post: ${self.postConditions}]
     ]
 }
+
+//OperationContext {
+//    @projection normal
+//    [context ${self.operation}
+//    [?body ${self.bodyExpression}]
+//    [?pre ${self.preConditions @horizontal @separator[\npre]}]
+//    [?post ${self.postConditions @horizontal @separator[\npost]}]
+//    ]
+//}
+//
+//AttributeContext {
+//    @projection normal
+//    [context ${self.attribute}
+//    [?init: ${self.initExpression}]
+//    [?derive: ${self.deriveExpression}]
+//    [?inv ${self.invariants @horizontal @separator[\ninv]}]
+//    ]
+//}
 
 AssociationClassCallExp {
     @projection normal
@@ -45,36 +63,36 @@ BooleanLiteralExp {
     @projection normal
         [${self.symbol}]
 }
-/**
- * CollectionItem : an element in a literal collection expression, like
- * '4' in 'Set{4,10,5}', or 'a.b' in 'Bag{ a.b }'.
- */
-CollectionItem {
-    @projection normal
-        [${self.item}]
-}
-/**
- * CollectionLiteralExp : a representation of a literal collection expression,
- * like 'Set{2,4,7}'
- */
-CollectionLiteralExp {
-    @projection normal
-    [ ${self.collectionType} { ${self.parts @horizontal @separator[, ]} }]
-}
-/**
- * CollectionLiteralPart : an element in a literal collection expression, like
- * '4' in 'Set{4,10,5}', or '10..24' in 'Bag{ 10..24 }'.
- */
-CollectionLiteralPart {
-}
-/**
- * CollectionRange : a range that represents a number of elements in a literal
- * collection expression, like '2..5' in 'Bag{ 2..5 }'.
- */
-CollectionRange {
-    @projection normal
-    [${self.first}..${self.last}]
-}
+///**
+// * CollectionItem : an element in a literal collection expression, like
+// * '4' in 'Set{4,10,5}', or 'a.b' in 'Bag{ a.b }'.
+// */
+//CollectionItem {
+//    @projection normal
+//        [${self.item}]
+//}
+///**
+// * CollectionLiteralExp : a representation of a literal collection expression,
+// * like 'Set{2,4,7}'
+// */
+//CollectionLiteralExp {
+//    @projection normal
+//    [ ${self.collectionType} { ${self.parts @horizontal @separator[, ]} }]
+//}
+///**
+// * CollectionLiteralPart : an element in a literal collection expression, like
+// * '4' in 'Set{4,10,5}', or '10..24' in 'Bag{ 10..24 }'.
+// */
+//CollectionLiteralPart {
+//}
+///**
+// * CollectionRange : a range that represents a number of elements in a literal
+// * collection expression, like '2..5' in 'Bag{ 2..5 }'.
+// */
+//CollectionRange {
+//    @projection normal
+//    [${self.first}..${self.last}]
+//}
 /**
  * EnumLiteralExp : a representation of a value of an enumeration type, like
  * 'gold'.
@@ -98,23 +116,23 @@ IntegerLiteralExp {
     @projection normal
     [${self.symbol}]
 }
-/**
- * IterateExp : a representation of the generic loop operation called 'iterate'.
- */
-IterateExp {
-    @projection normal
-    [->iterate ( [?${self.iterators @horizontal @separator[; ]} | ] ${self.body} ) ]
-//    [->iterate ( ${self.iterators @horizontal @separator[; ]} | ${self.body} ) ]
-}
-/**
- * IteratorExp : a representation of one of the loop expressions in the standard
- * library, e.g. 'forAll', 'exists'.
- */
-IteratorExp {
-    @projection normal
-    [->${self.referredIterator} ( [?${self.iterators @horizontal @separator[; ]} | ] ${self.body} ) ]
-//    [->${self.referredIterator} ( ${self.iterators @horizontal @separator[; ]} | ${self.body} ) ]
-}
+///**
+// * IterateExp : a representation of the generic loop operation called 'iterate'.
+// */
+//IterateExp {
+//    @projection normal
+//    [->iterate ( [?${self.iterators @horizontal @separator[; ]} | ] ${self.body} ) ]
+////    [->iterate ( ${self.iterators @horizontal @separator[; ]} | ${self.body} ) ]
+//}
+///**
+// * IteratorExp : a representation of one of the loop expressions in the standard
+// * library, e.g. 'forAll', 'exists'.
+// */
+//IteratorExp {
+//    @projection normal
+//    [->${self.referredIterator} ( [?${self.iterators @horizontal @separator[; ]} | ] ${self.body} ) ]
+////    [->${self.referredIterator} ( ${self.iterators @horizontal @separator[; ]} | ${self.body} ) ]
+//}
 /**
  * LetExp : a representation of an expression that holds a local variable
  */
@@ -138,8 +156,8 @@ LetExp {
 /**
  * ModelPropertyCallExp : an expression that refers to a property of a Classifier.
  */
-//ModelPropertyCallExp {
-//}
+ModelPropertyCallExp {
+}
 /**
  * NavigationCallExp : a representation of an expression that either references
  * an association end or an association class.

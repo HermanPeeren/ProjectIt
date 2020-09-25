@@ -1,0 +1,60 @@
+// this file contains the interfaces that are needed for the UML files of an octopus project
+language octopus
+
+interface IModelElement {
+    name: string;
+    pathName: PathName;
+}
+
+interface IPackagableElement base IModelElement {
+    visibility: VisibilityKind;
+}
+
+interface IClassifier base IPackagableElement {
+    attributes: Attribute[];
+    operations: IOperation[];
+    navigations: AssociationEnd[];
+    reference generalizations: IClassifier[];
+    reference subClasses: IClassifier[];
+    reference interfaces: UmlInterface[];
+    states: State[];
+    classAttributes: Attribute[];
+    classOperations: IOperation[];
+    isCollectionKind: boolean;
+    reference owner: UmlPackage;
+    isAbstract: boolean;
+    stereotype: string;
+}
+
+interface IClass base IClassifier {
+}
+
+interface IDataType base IClassifier {
+}
+
+interface ICollectionType base IDataType {
+}
+
+interface IPrimitiveType base IDataType {
+}
+
+interface ITupleType base IDataType {
+    parts: VariableDeclaration[];
+}
+
+interface IOperation base IPackagableElement {
+    parameters: IParameter[];
+    reference returnType?: IClassifier;
+    reference owner: IClassifier;
+    hasClassScope: boolean;
+    isOClDef: boolean;
+    isAbstract: boolean;
+    isInfix: boolean;
+    isPrefix: boolean;
+}
+
+interface IParameter base IModelElement {
+    reference type: IClassifier;
+    reference owner: IOperation;
+    directionKind: ParameterDirectionKind;
+}
