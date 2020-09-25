@@ -1,27 +1,27 @@
 language XXX
 
-model YYY {
+model YYY { // The model should have a 'name' property (error 7)
 }
-model ZZZ { // just one model is allowed
+model ZZZ { // just one model is allowed (error 1)
 }
-concept ZZZ {
-    simple: string; // properties must have unique names
+concept ZZZ { // Concept with name 'ZZZ' already exists (error 8)
+    simple: string; // properties must have unique names (error 9)
     simple: number;
-    reference xx: number; // references must have concept as type
+    reference xx: number; // references must have concept as type (error 2)
 }
-expression YYY {
+expression YYY { // Concept with name 'YYY' already exists (error 10)
 }
-limited AAA {
+limited AAA { // A non-abstract limited concept must have instances (error 3)
 }
-interface AAA {
+interface AAA { // Concept or interface with name 'AAA' already exists (error 12)
 }
 
-concept string { }
+concept string { } // Concept may not have a name that is equal to a reserved word in TypeScript (error 4)
 
-concept number { }
+concept number { } // Concept may not have a name that is equal to a reserved word in TypeScript (error 5)
 
-concept boolean { }
+concept boolean { } // Concept may not have a name that is equal to a reserved word in TypeScript (error 6)
 
 concept lowerCase { }
 
-concept LowerCase { }
+concept LowerCase { } // Concept with name 'LowerCase' already exists (error 11)

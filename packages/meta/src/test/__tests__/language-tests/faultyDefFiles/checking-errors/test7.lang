@@ -1,6 +1,7 @@
 language XXXX
 
 model r {
+    name: string;
     reference refProp: NoName;
     reference refProp2: NameNotStringType;
 }

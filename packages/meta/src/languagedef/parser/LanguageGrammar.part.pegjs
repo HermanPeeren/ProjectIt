@@ -118,9 +118,7 @@ expression = isPublic:publicKey? abs:abstractKey? binary:binaryKey? expressionKe
 property = part:partProperty      { return part; }
          / ref:referenceProperty  { return ref; }
 
-// TODO add initialvalue
- partProperty = isPublic:publicKey? name:var ws isOptional:optionalKey? name_separator ws type:var isList:"[]"? ws initialvalue:initialvalue? semicolon_separator
-//partProperty = isPublic:publicKey? name:var ws isOptional:optionalKey? name_separator ws type:var isList:"[]"? semicolon_separator
+partProperty = isPublic:publicKey? name:var ws isOptional:optionalKey? name_separator ws type:var isList:"[]"? ws initialvalue:initialvalue? semicolon_separator
     {
         if (type === "string" || type === "boolean" || type === "number") {
             return create.createPrimitiveProperty({
@@ -145,9 +143,7 @@ property = part:partProperty      { return part; }
         }
     }
 
-// TODO add initialvalue
- referenceProperty = isPublic:publicKey? referenceKey ws name:var ws isOptional:optionalKey? name_separator ws type:classifierReference isList:"[]"? ws initialvalue:initialvalue? semicolon_separator
-//referenceProperty = isPublic:publicKey? referenceKey ws name:var ws isOptional:optionalKey? name_separator ws type:classifierReference isList:"[]"? semicolon_separator
+referenceProperty = isPublic:publicKey? referenceKey ws name:var ws isOptional:optionalKey? name_separator ws type:classifierReference isList:"[]"? ws initialvalue:initialvalue? semicolon_separator
     { return create.createReferenceProperty({
         "isPublic": (!!isPublic),
         "name": name,

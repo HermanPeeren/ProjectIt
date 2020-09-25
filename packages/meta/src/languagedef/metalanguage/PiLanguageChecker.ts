@@ -459,7 +459,7 @@ export class PiLanguageChecker extends Checker<PiLanguage> {
                                 whenOk: () => {
                                     // console.log("checking " + element.initialValue + " against " + element.primType);
                                     this.simpleCheck(this.checkValueToType(element.initialValue, element.primType),
-                                        `Type of '${element.initialValue}' does not equal type of property '${element.name}' ${this.location(element)}.`);
+                                        `Type of '${element.initialValue}' does not equal type (${element.primType}) of property '${element.name}' ${this.location(element)}.`);
                                 }
                             });
                         } else {

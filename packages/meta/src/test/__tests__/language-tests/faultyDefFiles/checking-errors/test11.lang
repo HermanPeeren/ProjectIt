@@ -1,0 +1,23 @@
+language InitValues
+
+model TestStart {
+    name: string;
+    unit: AA;
+}
+
+modelunit AA  {
+    name: string;
+    // TODO the checker should find an error in the next two statements
+    AAprop1a: string = 102; // should be a string
+    AAprop2a: string[] = [12, 24, 36, 48]; // should all be strings
+    AAprop3a: number = "AAP"; // should be a number
+    AAprop4a: number[] = "AAP"; // should be a list of numbers
+    AAprop5a: boolean = [true, false, true, false, true]; // should be a single boolean value
+    AAprop6a: boolean[] = false; // should be a list of boolean values
+    AAprop1: string = "EEN TEKST"; // correct
+    AAprop2: string[] = ["AAP", "NOOT", "MIES"]; // correct
+    AAprop3: number = 102; // correct
+    AAprop4: number[] = [12, 24, 36, 48]; // correct
+    AAprop5: boolean = false; // correct
+    AAprop6: boolean[] = [true, false, true, false, true]; // correct
+}
