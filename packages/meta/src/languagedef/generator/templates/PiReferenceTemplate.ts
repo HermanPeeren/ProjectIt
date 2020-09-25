@@ -49,7 +49,7 @@ export class PiReferenceTemplate {
                 return result;
             }
             
-            @observable private _PI_name: string = "";
+            @observable private _PI_pathname: string[] = [];
             @observable private _PI_referred: T = null;
         
             // Needed for the scoper to work
@@ -68,20 +68,16 @@ export class PiReferenceTemplate {
             }
         
             set name(value: string) {
-                this._PI_name = value;
+                this._PI_pathname.push(value);
                 this._PI_referred = null;
             }
         
             @computed
             get name(): string {
-                // TODO this should be made clearer
                 if(!!this._PI_referred){
-                    // this._PI_name = this._PI_referred.name;
                     return this.referred.name
-                } else {
-                    // this._PI_referred = ${Names.environment(language)}.getInstance().scoper.getFromVisibleElements(this.piContainer().container, this._PI_name, this.typeName) as T;
                 }
-                return this._PI_name;
+                return this._PI_pathname[this._PI_pathname.length - 1];
             }
         
             // @computed
@@ -89,16 +85,29 @@ export class PiReferenceTemplate {
                 if (!!this._PI_referred) {
                     return this._PI_referred;
                 } else {
-                    return ${Names.environment(language)}.getInstance().scoper.getFromVisibleElements(this.piContainer().container, this._PI_name, this.typeName) as T;
+                    // return ${Names.environment(language)}.getInstance().scoper.getFromVisibleElements(this.piContainer().container, this._PI_name, this.typeName) as T;
+                    let parentscope = this.piContainer().container;
+                    for(const str of this._PI_pathname) {
+                        let found = ${Names.environment(language)}.getInstance().scoper.getFromVisibleElements(
+                            parentscope,
+                            str,
+                            this.typeName
+                        );
+                        if (!!found) {
+                            parentscope = found;
+                        }
+                    }
+                    if (parentscope !== this.piContainer().container) {
+                        return parentscope as T;
+                    } else {
+                        return null;
+                    }               
                 }
-                // return this._PI_referred;
             }
         
             set referred(referredElement) {
                 if (!!referredElement) {
-                    this._PI_name = referredElement.name;
-                } else {
-                    this._PI_name = "";
+                    this._PI_pathname.push(referredElement.name);
                 }
                 this._PI_referred = referredElement;
             }
