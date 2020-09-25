@@ -1,0 +1,5 @@
+package trainWagon
+context Train       
+    def: barWagon(): Set(Wagon) =  self.wagon->select(w|w.bar=true)
+--context T::barWagon: Set(Wagon) =  self.wagon->select(w|w.bar=true)
+endpackage

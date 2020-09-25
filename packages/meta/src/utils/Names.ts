@@ -193,8 +193,8 @@ export class Names {
         return this.startWithUpperCase(language?.name) + "ModelUnitWriter";
     }
 
-    public static pegjs(unit: PiConcept): string {
-        return this.startWithUpperCase(unit?.name) + "Parser";
+    public static pegjs(language: PiLanguage): string {
+        return this.startWithUpperCase(language?.name) + "Parser";
     }
 
     public static reader(language: PiLanguage): string {

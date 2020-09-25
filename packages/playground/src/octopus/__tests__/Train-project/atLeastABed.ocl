@@ -1,0 +1,4 @@
+package trainWagon
+context Train
+    inv atLeastABed: self.wagon->forAll(w|w.oclAsType(SleepingCar).numberOfBeds >= 1) 
+endpackage

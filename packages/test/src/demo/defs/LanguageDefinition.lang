@@ -59,7 +59,9 @@ concept DemoAttribute {
     reference declaredType: DemoAttributeType;
     name: string;
 }
+/* some comments
 
+*/
 concept DemoAttributeWithEntityType {
     reference declaredType: DemoEntity;
     name: string;

@@ -1,0 +1,299 @@
+language octopus
+
+modelunit OclPart {
+    name: string;
+    reference umlPackage: UmlPackage;
+    contexts: OclContext[];
+}
+
+concept OclContext {
+    reference referredElement: IPackagableElement;
+    initExpression?: OclExpression;
+    deriveExpression?: OclExpression;
+    invariants: OclExpression[];
+    definitions: OclExpression[];
+    bodyExpression?: OclExpression;
+    preConditions: OclExpression[];
+    postConditions: OclExpression[];
+}
+
+/**
+ * AssociationClassCallExp represents an expression that is a call to
+ * an AssociationClass.
+ * <p>
+ * For instance, if class A and class B are associated through association class AB,
+ * the following expression is an instance of IAssociationClassCallExp.
+ * context A
+ * inv: AB
+ * Note that this is not a correct invariant!
+ *
+ */
+expression AssociationClassCallExp base NavigationCallExp {
+    reference referredAssociationClass: AssociationClass;
+}
+/**
+ * AssociationEndCallExp : a representation of a reference to an association end.
+ */
+expression AssociationEndCallExp base NavigationCallExp {
+    reference referredAssociationEnd: AssociationEnd;
+}
+/**
+ * AttributeCallExp : a representation of a reference to an attribute.
+ */
+expression AttributeCallExp base ModelPropertyCallExp {
+    reference referredAttribute: Attribute;
+}
+/**
+ * BooleanLiteralExp : an expression that is a literal boolean value, like 'true'.
+ */
+expression BooleanLiteralExp base PrimitiveLiteralExp {
+    symbol: boolean;
+}
+/**
+ * CollectionItem : an element in a literal collection expression, like
+ * '4' in 'Set{4,10,5}', or 'a.b' in 'Bag{ a.b }'.
+ */
+expression CollectionItem base CollectionLiteralPart {
+    item: OclExpression;
+}
+/**
+ * CollectionLiteralExp : a representation of a literal collection expression,
+ * like 'Set{2,4,7}'
+ */
+expression CollectionLiteralExp base LiteralExp {
+    reference collectionType: CollectionType; // added by Anneke
+    parts: CollectionLiteralPart[];
+}
+/**
+ * CollectionLiteralPart : an element in a literal collection expression, like
+ * '4' in 'Set{4,10,5}', or '10..24' in 'Bag{ 10..24 }'.
+ */
+expression CollectionLiteralPart {
+}
+/**
+ * CollectionRange : a range that represents a number of elements in a literal
+ * collection expression, like '2..5' in 'Bag{ 2..5 }'.
+ */
+expression CollectionRange base CollectionLiteralPart {
+    first: OclExpression;
+    last: OclExpression;
+}
+/**
+ * EnumLiteralExp : a representation of a value of an enumeration type, like
+ * 'gold'.
+ */
+expression EnumLiteralExp base LiteralExp {
+    reference referredEnumLiteral: EnumLiteral;
+}
+/**
+ * IfExp : a representation of an if expression.
+ */
+expression IfExp {
+    condition: OclExpression;
+    thenExpression: OclExpression;
+    elseExpression?: OclExpression;
+
+}
+/**
+ * IntegerLiteralExp : an expression that is a literal integer value, like '100'.
+ */
+expression IntegerLiteralExp base NumericLiteralExp {
+    symbol: number;
+}
+/**
+ * IterateExp : a representation of the generic loop operation called 'iterate'.
+ */
+expression IterateExp base LoopExp {
+    result: VariableDeclaration;
+}
+/**
+ * IteratorExp : a representation of one of the loop expressions in the standard
+ * library, e.g. 'forAll', 'exists'.
+ */
+expression IteratorExp base LoopExp {
+    reference referredIterator: OclIterator; // type from stdlib
+}
+/**
+ * LetExp : a representation of an expression that holds a local variable
+ */
+expression LetExp base OclExpression {
+    variable: VariableDeclaration;
+    inExp: OclExpression;
+}
+/**
+ * LiteralExp : a representation of an expression
+ * with no argumnets that produces a value.
+ */
+abstract expression LiteralExp base OclExpression {
+}
+/**
+ * LoopExp : a representation of an expression that loops over a collection.
+ * All elements of the collection are visited and the body is executed for
+ * each of them in turn.
+ */
+abstract expression LoopExp base PropertyCallExp {
+    body: OclExpression;
+    iterators: VariableDeclaration[];
+}
+/**
+ * ModelPropertyCallExp : an expression that refers to a property of a Classifier.
+ */
+expression ModelPropertyCallExp base PropertyCallExp {
+}
+/**
+ * NavigationCallExp : a representation of an expression that either references
+ * an association end or an association class.
+ */
+expression NavigationCallExp base ModelPropertyCallExp {
+    reference navigationSource: AssociationEnd;
+}
+/**
+ * NumericLiteralExp : an expression that is a literal numeric value, like '100' or '2.3'.
+ */
+expression NumericLiteralExp base PrimitiveLiteralExp {
+}
+/**
+ * OclExpression : a representation of an expression written in OCL that must be evaluated
+ * in a certain environment (its context). Evaluation always results in a value, for instance
+ * a simpel string or integer value, or an object, or datatype instance.
+ */
+abstract expression OclExpression implements IModelElement {
+	/**
+	 * Because evaluating an OclExpression results in a value, this value can
+	 * in turn be used as part of another OclExpression. The 'appliedProperty'
+	 * represents the operation or loopexpression that is used to build the larger
+	 * expression.
+	 */
+	appliedProperty?: PropertyCallExp;
+	/**
+	 * returns the last property call. E.g in a.b->c(..).b()
+	 * it will return the property call <i>b</i>. If the OCL
+	 * expression has no applied property it returns null.
+	 */
+//	lastAppliedProperty?: PropertyCallExp;
+	/**
+	 * Method getNodeType returns the type of this node in the
+	 * abstract syntax tree. E.g. when this object holds the information
+	 * on the 'if-then-else' part of the expression:
+	 * <code>(if true then a else b).someProperty.attr<\code>
+	 * , then this method will return the type of the 'if-then-else' part
+	 * (which is equal to the type of 'a' and 'b'; both should
+	 * have the same type). The method getExpressionType on the other hand
+	 * would return the type of 'attr'.
+	 */
+	nodeType: IClassifier;
+	/**
+	 * Method getExpressionType returns the type of the complete expression
+	 * taking into account all applied properties. E.g. when this object
+	 * holds the information on the 'if-then-else' part of the expression:
+	 * (if true then a else b).someProperty.attr
+	 * , then this method will return the type of 'attr'.
+	 * The method getNodeType on the other hand would return the type
+	 * of the 'if-then-else' part.
+	 */
+//	expressionType: IClassifier;
+	/**
+	 * Returns true if this ast-node was inserted by the OclEngine to complete
+	 * the AST. It was not present in the user-edited input to the OclEngine.
+	 * For instance, when the user has given the text
+	 * <code>context ClassA inv: anAttribute = true<\code>
+	 * the OclEngine will add a node to represent the 'self' keyword that was omitted
+	 * before 'anAttribute'. This node will be marked implicit.
+	 */
+	isImplicit: boolean;
+}
+/** IOclMessageExp : an expression that reflects a message that was sent
+ *  The ^ or ^^ in the OCL spec.
+ */
+expression OclMessageExp base OclExpression {
+    target: OclExpression;
+    arguments: OclExpression[];
+    reference referredOperation: Operation;
+}
+/**
+ * OclStateLiteralExp : a representation of an expression that refers to a
+ * state of a Classifier.
+ * <p>
+ * Note that this metaclass is not present in the OCL 2.0 specification.
+ */
+expression OclStateLiteralExp base LiteralExp {
+    reference referredState: State;
+}
+/**
+ * OclTypeLiteralExp : a representation of an expression that refers to a
+ * Classifier itself, i.e used as type in for instance the 'oclAsType' operation.
+ * <p>
+ * Note that this metaclass is not present in the OCL 2.0 specification.
+ */
+expression OclTypeLiteralExp base LiteralExp {
+    reference referredClassifier: IClassifier;
+}
+/**
+ * OclUndefinedLiteralExp : an expression that is a literal OCL undefined value, the only value is 'oclUndefined'.
+ */
+ expression OclUndefinedLiteralExp base PrimitiveLiteralExp {
+     symbol: string;
+ }
+/**
+ * OperationCallExp : a representation of an expression that refers to an operation on
+ * a Classifier.
+ */
+expression OperationCallExp base ModelPropertyCallExp {
+    reference referredOperation: Operation;
+    arguments: OclExpression[];
+}
+/**
+ * PrimitiveLiteralExp : an expression that denotes a value of a primitive type
+ */
+expression PrimitiveLiteralExp base LiteralExp {
+}
+/**
+ * PropertyCallExp : an expression that refers to a property of a type.
+ * A property can be an operation, attribute, association end, predefined
+ * iterator, etc.
+ */
+expression PropertyCallExp base OclExpression {
+    reference source: OclExpression;
+    isMarkedpre: boolean;
+}
+/**
+ * RealLiteralExp : an expression that is a literal integer value, like '1.23'.
+ */
+expression RealLiteralExp base NumericLiteralExp {
+// TODO: change symbol
+//    symbol: float;
+    symbol: number;
+}
+/**
+ * StringLiteralExp : an expression that is a literal string value, like 'aString'.
+ */
+expression StringLiteralExp base PrimitiveLiteralExp {
+    symbol: string;
+}
+/**
+ * TupleLiteralExp : an expression that denotes a tuple value.
+ */
+expression TupelLiteralExp base LiteralExp {
+    tupleParts: VariableDeclaration[];
+}
+/**
+ * OclUndefinedLiteralExp : an expression that is a literal OCL undefined value, the only value is 'oclUndefined'.
+ */
+expression UnspecifiedValueExp base OclExpression {
+}
+/**
+ * VariableDeclaration : an expression that defines a variable and binds
+ * it to a type. Optionally it can hold an initial value for the variable.
+ */
+concept VariableDeclaration implements IModelElement {
+// name: string; inherted from IModelElement
+    type: IClassifier;
+    initExpression: OclExpression;
+    isIteratorVar: boolean;
+}
+/**
+ * VariableExp : an expression that is a reference to a variable.
+ */
+expression VariableExp base OclExpression {
+    reference referredVariable: VariableDeclaration;
+}
