@@ -17,20 +17,7 @@ export class PiReferenceTemplate {
          * References can be set with either a referred object, or with a name.
          */
         export class ${Names.PiElementReference}< T extends ${Names.PiNamedElement}> extends MobxModelElementImpl {
-        
-            /**
-             * Returns a new instance which refers to an element named 'name' of type T.
-             * Param 'typeName' should be equal to T.constructor.name.
-             * @param name
-             * @param typeName
-             */        
-            public static createNamed< T extends ${Names.PiNamedElement}>(name: string, typeName: string): ${Names.PiElementReference}<T> {
-                const result = new ${Names.PiElementReference}(null, typeName);
-                result.name = name;
-                result.typeName = typeName;
-                return result;
-            }
-        
+              
             /**
              * Returns a new instance which refers to an element named 'name' of type T, or
              * to the element 'name' itself.
@@ -38,11 +25,13 @@ export class PiReferenceTemplate {
              * @param name
              * @param typeName
              */
-            public static create< T extends ${Names.PiNamedElement}>(name: string | T, typeName: string): ${Names.PiElementReference}<T> {
+            public static create< T extends ${Names.PiNamedElement}>(name: string | string[] | T, typeName: string): ${Names.PiElementReference}<T> {
                 const result = new ${Names.PiElementReference}(null, typeName);
-                if( typeof name === "string" ) {
+                if (Array.isArray(name)) {
+                    result.pathname = name;
+                } else if (typeof name === "string") {
                     result.name = name;
-                } else if( typeof name === "object" ){
+                } else if (typeof name === "object") {
                     result.referred = name;
                 }
                 result.typeName = typeName;
@@ -71,6 +60,11 @@ export class PiReferenceTemplate {
                 this._PI_pathname.push(value);
                 this._PI_referred = null;
             }
+            
+            set pathname(value: string[]) {
+                this._PI_pathname = value;
+                this._PI_referred = null;
+            }
         
             @computed
             get name(): string {
@@ -79,29 +73,62 @@ export class PiReferenceTemplate {
                 }
                 return this._PI_pathname[this._PI_pathname.length - 1];
             }
-        
+
+            @computed
+            get pathname(): string[] {
+                let result: string[] = [];
+                for (const elem of this._PI_pathname) {
+                    result.push(elem);                    
+                }
+                return result;
+            }
+            
+            pathnameToString(separator: string): string {
+                let result: string = "";
+                for (let index = 0; index < this._PI_pathname.length; index++) {
+                    let str = this._PI_pathname[index];
+                    if (index === this._PI_pathname.length - 1) {
+                        result += str;
+                    } else {
+                        result += str + separator;
+                    }
+                }
+                return result;
+            }
+            
             // @computed
             get referred(): T {
                 if (!!this._PI_referred) {
                     return this._PI_referred;
                 } else {
                     // return ${Names.environment(language)}.getInstance().scoper.getFromVisibleElements(this.piContainer().container, this._PI_name, this.typeName) as T;
-                    let parentscope = this.piContainer().container;
-                    for(const str of this._PI_pathname) {
-                        let found = ${Names.environment(language)}.getInstance().scoper.getFromVisibleElements(
-                            parentscope,
-                            str,
-                            this.typeName
-                        );
-                        if (!!found) {
-                            parentscope = found;
+                    let container = this.piContainer().container;
+                    let found: PiNamedElement = null;
+                    for (let index = 0; index < this._PI_pathname.length ; index++) {
+                        let str = this._PI_pathname[index];
+                        if (index === this._PI_pathname.length - 1) {
+                            // the last name in the pathname, therefore we must/can use the type information
+                            found = ${Names.environment(language)}.getInstance().scoper.getFromVisibleElements(
+                                container,
+                                str,
+                                this.typeName
+                            );
+                        } else {
+                            // for all names in front of the last name of the pathname, we cannot use the type information
+                            // because the namespace(s) will not have the correct type
+                            found = ${Names.environment(language)}.getInstance().scoper.getFromVisibleElements(
+                                container,
+                                str
+                            );
+                            if (!!found) {
+                                // set the container for finding the next part of the pathname
+                                container = found;
+                            } else {
+                                return null;
+                            }
                         }
                     }
-                    if (parentscope !== this.piContainer().container) {
-                        return parentscope as T;
-                    } else {
-                        return null;
-                    }               
+                    return found as T;            
                 }
             }
         
