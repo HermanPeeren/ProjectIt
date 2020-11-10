@@ -33,18 +33,19 @@ describe("Testing Default Scoper", () => {
         const model: DSmodel = creator.createModel(1, 2 );
         // run the scoper to test all names in the model
         const visibleNames = scoper.getVisibleNames( model );
+        printDifference(creator, visibleNames);
         // print("names in model of depth 2: ", visibleNames);
         for (const x of creator.allNames) {
             expect(visibleNames).toContain(x);
         }
         // run unparser to inspect model
-        const unparsed: string = unparser.writeToString(model, 0, false);
-        const path: string = "./unparsedGeneratedModel.txt";
-        if (!fs.existsSync(path)) {
-            fs.writeFileSync(path, unparsed);
-        } else {
-            console.log(this, "test-unparser: user file " + path + " already exists, skipping it.");
-        }
+        // const unparsed: string = unparser.writeToString(model, 0, false);
+        // const path: string = "./unparsedGeneratedModel.txt";
+        // if (!fs.existsSync(path)) {
+        //     fs.writeFileSync(path, unparsed);
+        // } else {
+        //     console.log(this, "test-unparser: user file " + path + " already exists, skipping it.");
+        // }
         // run the validator to see if the references are ok
         const validator = environment.validator;
         const errors = validator.validate(model);

@@ -127,7 +127,6 @@ export class ExtendedModelCreator {
             // copy ref
             const someReference: PiElementReference<DSref> = PiElementReference.create<DSref>(ref.pathname, "DSref");
             dSunit.dsRefs.push(someReference);
-            // console.log("copying reference " + ref.pathnameToString("/") + " to " + someReference.pathnameToString("/"));
         }
         dSunit.dsPrivates.forEach(part => this.addReferences(part));
         dSunit.dsPublics.forEach(part => this.addReferences(part));
@@ -148,6 +147,11 @@ export class ExtendedModelCreator {
         walker.walk(model, () => {
             return true;
         });
+        let printStr: string = "";
+        worker.references.forEach(ref => {
+           printStr += ref.pathnameToString("/") + "\n";
+        });
+        console.log(printStr);
         this.allReferences = worker.references;
     }
 }

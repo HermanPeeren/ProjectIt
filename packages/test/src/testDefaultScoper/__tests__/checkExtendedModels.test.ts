@@ -31,7 +31,7 @@ describe("Testing Default Scoper", () => {
     const unparser = environment.writer;
 
     test("names in model with 1 unit of depth 3", () => {
-        const model: DSmodel = creator.createModel(1, 3 );
+        const model: DSmodel = creator.createModel(1, 1 );
         // run the scoper to test all names in the model
         const visibleNames = scoper.getVisibleNames( model );
         // print("names in model of depth 2: ", visibleNames);
@@ -45,7 +45,7 @@ describe("Testing Default Scoper", () => {
         errors.forEach(mess => {
             errorMessages.push(mess.message + " in " + mess.locationdescription);
         });
-        // print("found errors", errorMessages);
+        print("found errors", errorMessages);
         expect (errors.length).toBe(0);
     });
 
